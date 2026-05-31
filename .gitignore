@@ -55,3 +55,34 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# ==========================================
+# Visual Studio & Tooling Specific Entries
+# ==========================================
+.vs/
+[Dd]ata[Cc]ache/
+[Ee]xt[Ex]tension*/
+[Gg]enerated_*/
+[Ii]ntermediate[Cc]ache/
+[Ss]hadow[Cc]ache/
+[Tt]emp/
+[Vv]irtual[Cc]ache/
+.vsidx
+*.vsidx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.backup.json
+DocumentLayout.json
+
+# Roslyn & DesignTime Cache
+.dtbcache*
+.futdcache*
+
+# GitHub Copilot and other AI Extensions Cache
+.vs/**/CopilotIndices/
+**/CopilotIndices/
+CodeChunks.db
+SemanticSymbols.db
