@@ -12,16 +12,15 @@ namespace Reserva_laboratorio.Services
     public class ReservacionService : IReservacionService
     {
         private readonly IReservacionRepository _reservacionRepository;
-        private readonly ILaboratorioService _laboratorioService;
-        private readonly IProfesorService _profesorService;
+        private readonly IRegistroLaboratorioRepository _laboratorioRepository;
+
+
         public ReservacionService(
             IReservacionRepository reservacionRepository,
-            ILaboratorioService laboratorioService,
-            IProfesorService profesorService)
+            IRegistroLaboratorioRepository laboratorioRepository)
         {
             _reservacionRepository = reservacionRepository;
-            _laboratorioService = laboratorioService;
-            _profesorService = profesorService;
+            _laboratorioRepository = laboratorioRepository;
         }
 
         public List<Reservacion> ObtenerHistorialReservas()
@@ -46,6 +45,10 @@ namespace Reserva_laboratorio.Services
                 throw new ArgumentException("Los rangos de hora de inicio y fin son obligatorios.");
             }
 
+            if (string.Compare(reservacion.HoraInicio, reservacion.HoraFin) >= 0)
+            {
+                throw new ArgumentException("La hora de fin debe ser mayor a la hora de inicio.");
+            }
             bool laboratorioOcupado = _reservacionRepository.ObtenerTodas().Any(r =>
                 r.LaboratorioSeleccionado.Nombre.Equals(reservacion.LaboratorioSeleccionado.Nombre, StringComparison.OrdinalIgnoreCase) &&
                 r.Fecha.Date == reservacion.Fecha.Date &&
@@ -59,7 +62,8 @@ namespace Reserva_laboratorio.Services
 
             _reservacionRepository.Guardar(reservacion);
 
-            var labMaestro = _laboratorioService.ObtenerTodosLosLaboratorios()
+
+            var labMaestro = _laboratorioRepository.ObtenerTodos()
                 .FirstOrDefault(l => l.Nombre.Equals(reservacion.LaboratorioSeleccionado.Nombre, StringComparison.OrdinalIgnoreCase));
 
             if (labMaestro != null)

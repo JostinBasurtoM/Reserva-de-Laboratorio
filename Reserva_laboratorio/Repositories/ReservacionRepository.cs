@@ -1,4 +1,5 @@
-﻿using Reserva_laboratorio.Models;
+﻿using Reserva_laboratorio.Interfaces.Repositories;
+using Reserva_laboratorio.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Reserva_laboratorio.Repositories
 {
-    public class ReservacionRepository
+    public class ReservacionRepository : IReservacionRepository
     {
             private static readonly List<Reservacion> _reservaciones = new List<Reservacion>();
     

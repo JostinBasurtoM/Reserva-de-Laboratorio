@@ -28,12 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrincipal));
             pnlContenedor = new Panel();
             button3 = new Button();
             btn_registro = new Button();
             btn_lista = new Button();
             pnlContenido = new Panel();
+            pctLogo = new PictureBox();
+            label2 = new Label();
+            label1 = new Label();
             pnlContenedor.SuspendLayout();
+            pnlContenido.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pctLogo).BeginInit();
             SuspendLayout();
             // 
             // pnlContenedor
@@ -79,11 +85,44 @@
             // 
             // pnlContenido
             // 
+            pnlContenido.Controls.Add(pctLogo);
+            pnlContenido.Controls.Add(label2);
+            pnlContenido.Controls.Add(label1);
             pnlContenido.Dock = DockStyle.Fill;
             pnlContenido.Location = new Point(0, 27);
             pnlContenido.Name = "pnlContenido";
             pnlContenido.Size = new Size(800, 423);
             pnlContenido.TabIndex = 1;
+            // 
+            // pctLogo
+            // 
+            pctLogo.Location = new Point(482, 112);
+            pctLogo.Name = "pctLogo";
+            pctLogo.Size = new Size(212, 173);
+            pctLogo.TabIndex = 2;
+            pctLogo.TabStop = false;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 18F);
+            label2.Location = new Point(171, 34);
+            label2.Name = "label2";
+            label2.Size = new Size(455, 32);
+            label2.TabIndex = 1;
+            label2.Text = "SISTEMA DE RESERVA DE LABORATORIOS";
+            label2.Click += label2_Click;
+            // 
+            // label1
+            // 
+            label1.BorderStyle = BorderStyle.FixedSingle;
+            label1.Font = new Font("Segoe UI", 12F);
+            label1.Location = new Point(56, 112);
+            label1.Name = "label1";
+            label1.Size = new Size(328, 173);
+            label1.TabIndex = 0;
+            label1.Text = resources.GetString("label1.Text");
+            label1.Click += label1_Click;
             // 
             // FrmPrincipal
             // 
@@ -96,6 +135,9 @@
             Text = "FrmPrincipal";
             Load += FrmPrincipal_Load;
             pnlContenedor.ResumeLayout(false);
+            pnlContenido.ResumeLayout(false);
+            pnlContenido.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pctLogo).EndInit();
             ResumeLayout(false);
         }
 
@@ -106,5 +148,8 @@
         private Button btn_registro;
         private Button btn_lista;
         private Panel pnlContenido;
+        private Label label1;
+        private Label label2;
+        private PictureBox pctLogo;
     }
 }
