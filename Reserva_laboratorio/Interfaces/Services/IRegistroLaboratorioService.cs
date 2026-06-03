@@ -11,5 +11,10 @@ namespace Reserva_laboratorio.Interfaces.Services
     {
         Task RegistrarLaboratorio(Laboratorio laboratorio);
         List<Laboratorio> ObtenerTodosLosLaboratorios();
+        Task ActualizarLaboratorio(Laboratorio laboratorio);
+
+        Task EliminarLaboratorio(int id);
+
+
     }
 }

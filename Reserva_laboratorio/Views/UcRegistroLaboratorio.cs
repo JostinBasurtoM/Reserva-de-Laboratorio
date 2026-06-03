@@ -15,19 +15,37 @@ namespace Reserva_laboratorio.Views
 {
     public partial class UcRegistroLaboratorio : UserControl
     {
+        private Laboratorio laboratorioEditando;
+        private bool esEdicion = false;
         private readonly IRegistroLaboratorioService _laboratorioService;
+        public event Action OnLaboratorioGuardado;
         public UcRegistroLaboratorio()
         {
             InitializeComponent();
             _laboratorioService = new RegistroLaboratorioService();
             CargarUbicaciones();
+            btnLimpiar.Click += btnLimpiar_Click;
+        }
+
+        public UcRegistroLaboratorio(Laboratorio lab)
+        {
+            InitializeComponent();
+            _laboratorioService = new RegistroLaboratorioService();
+            CargarUbicaciones();
+            laboratorioEditando = lab;
+            esEdicion = true;
+
+
+            txtNombreLaboratorio.Text = lab.Nombre;
+            nudCapacidad.Value = lab.Capacidad;
+            cmbUbicacion.SelectedItem = lab.Ubicacion;
         }
         private void CargarUbicaciones()
         {
-            // Limpiamos por si acaso
+      
             cmbUbicacion.Items.Clear();
 
-            // Agrega aquí los bloques o aulas normadas de tu universidad
+       
             string[] ubicacionesNormadas = {
         "Bloque 1 - Planta Alta",
         "Bloque 1 - Planta Baja",
@@ -36,10 +54,10 @@ namespace Reserva_laboratorio.Views
         "Edificio Central - Aula Magna"
     };
 
-            // Los inyectamos al ComboBox
+      
             cmbUbicacion.Items.AddRange(ubicacionesNormadas);
 
-            // Opcional: dejamos seleccionado ninguno por defecto
+     
             cmbUbicacion.SelectedIndex = -1;
         }
         private void label1_Click(object sender, EventArgs e)
@@ -47,38 +65,62 @@ namespace Reserva_laboratorio.Views
 
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-                Laboratorio nuevoLaboratorio = new Laboratorio
+                if (esEdicion && laboratorioEditando != null)
                 {
-                    Nombre = txtNombreLaboratorio.Text.Trim(),
+                   
+                    laboratorioEditando.Nombre = txtNombreLaboratorio.Text.Trim();
+                    laboratorioEditando.Capacidad = (int)nudCapacidad.Value;
+                    laboratorioEditando.Ubicacion = cmbUbicacion.SelectedItem?.ToString() ?? string.Empty;
 
-                    Capacidad = (int)nudCapacidad.Value,
+                    await _laboratorioService.ActualizarLaboratorio(laboratorioEditando);
 
-                    Ubicacion = cmbUbicacion.SelectedItem?.ToString() ?? string.Empty,
+                    MessageBox.Show("Laboratorio actualizado correctamente",
 
-                    Disponibilidad = true
-                };
+                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.ParentForm.Close();
+                    OnLaboratorioGuardado?.Invoke();
+                }
+                else
+                {
+              
+                    Laboratorio nuevoLaboratorio = new Laboratorio
+                    {
+                        Nombre = txtNombreLaboratorio.Text.Trim(),
+                        Capacidad = (int)nudCapacidad.Value,
+                        Ubicacion = cmbUbicacion.SelectedItem?.ToString() ?? string.Empty,
+                        Disponibilidad = true
+                    };
 
-                _laboratorioService.RegistrarLaboratorio(nuevoLaboratorio);
+                    await _laboratorioService.RegistrarLaboratorio(nuevoLaboratorio);
 
-                MessageBox.Show("Laboratorio registrado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Laboratorio registrado exitosamente.",
+                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
                 LimpiarFormulario();
+
+              
+                esEdicion = false;
+                laboratorioEditando = null;
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Datos Incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Datos Incompletos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message, "Error de Duplicidad", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error de Duplicidad",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error inesperado: {ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ocurrió un error inesperado: {ex.Message}",
+                    "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -87,6 +129,9 @@ namespace Reserva_laboratorio.Views
             txtNombreLaboratorio.Clear();
             nudCapacidad.Value = 1;
             cmbUbicacion.SelectedIndex = -1;
+
+            esEdicion = false;
+            laboratorioEditando = null;
         }
 
 
@@ -103,6 +148,36 @@ namespace Reserva_laboratorio.Views
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void UcRegistroLaboratorio_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UcRegistroLaboratorio_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UcRegistroLaboratorio_Load_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarFormulario();
         }
     }
 }
