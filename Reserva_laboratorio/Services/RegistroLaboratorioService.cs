@@ -51,5 +51,47 @@ namespace Reserva_laboratorio.Services
         {
             return _laboratorioRepository.ObtenerTodos();
         }
+
+        public Task ActualizarLaboratorio(Laboratorio laboratorio)
+        {
+            if (laboratorio == null)
+                throw new ArgumentNullException(nameof(laboratorio));
+
+            if (laboratorio.Id <= 0)
+                throw new ArgumentException("ID inválido.");
+
+            if (string.IsNullOrWhiteSpace(laboratorio.Nombre))
+                throw new ArgumentException("El nombre es obligatorio.");
+
+            if (laboratorio.Capacidad <= 0)
+                throw new ArgumentException("La capacidad debe ser mayor a 0.");
+
+            var existeDuplicado = _laboratorioRepository.ObtenerTodos()
+                .Any(x => x.Nombre.Equals(laboratorio.Nombre, StringComparison.OrdinalIgnoreCase)
+                       && x.Id != laboratorio.Id);
+
+            if (existeDuplicado)
+                throw new InvalidOperationException("Ya existe otro laboratorio con ese nombre.");
+
+            _laboratorioRepository.Actualizar(laboratorio);
+
+            return Task.CompletedTask;
+        }
+
+        public Task EliminarLaboratorio(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("ID inválido.");
+
+            var existe = _laboratorioRepository.ObtenerTodos()
+                .Any(x => x.Id == id);
+
+            if (!existe)
+                throw new InvalidOperationException("El laboratorio no existe.");
+
+            _laboratorioRepository.Eliminar(id);
+
+            return Task.CompletedTask;
+        }
     }
 }

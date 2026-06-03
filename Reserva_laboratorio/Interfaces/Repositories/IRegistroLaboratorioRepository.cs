@@ -11,5 +11,9 @@ namespace Reserva_laboratorio.Interfaces.Repositories
     {
         void Guardar(Laboratorio laboratorio);
         List<Laboratorio> ObtenerTodos();
+
+        void Actualizar(Laboratorio laboratorio);
+
+        void Eliminar(int id);
     }
 }
