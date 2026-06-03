@@ -16,6 +16,21 @@ namespace Reserva_laboratorio.View
         public FrmPrincipal()
         {
             InitializeComponent();
+            pctLogo.SizeMode = PictureBoxSizeMode.Zoom;
+
+            try
+            {
+                string rutaImagen = Path.Combine(Application.StartupPath, "Assets", "Logo-UG-2016.png");
+
+                if (File.Exists(rutaImagen))
+                {
+                    pctLogo.Image = System.Drawing.Image.FromFile(rutaImagen);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"No se pudo cargar el logo: {ex.Message}");
+            }
         }
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
@@ -51,6 +66,16 @@ namespace Reserva_laboratorio.View
 
             vistaReserva.Dock = DockStyle.Fill;
             pnlContenido.Controls.Add(vistaReserva);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
